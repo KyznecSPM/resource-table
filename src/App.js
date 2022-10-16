@@ -1,25 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import { Range } from './components/Range';
+import { Table } from './components/Table';
+import { useFetchResources } from './hooks/useFetchResources';
+import { useReduceResources } from './hooks/useReduceResources';
+import { useRange } from './hooks/useRange';
 
-function App() {
+export function App() {
+  const allResourceInfo = useFetchResources();
+  const { displayResources, reduceResources } =
+    useReduceResources(allResourceInfo);
+
+  const { min, max, values, rangeChange } = useRange(
+    reduceResources,
+    allResourceInfo
+  );
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Range min={min} max={max} values={values} rangeChange={rangeChange} />
+      <Table data={displayResources} />
+    </>
   );
 }
-
-export default App;
